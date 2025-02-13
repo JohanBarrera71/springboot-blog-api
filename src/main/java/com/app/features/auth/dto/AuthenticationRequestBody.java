@@ -1,5 +1,6 @@
 package com.app.features.auth.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,14 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AuthenticationRequestBody {
+    @NotBlank(message = "Email is mandatory")
     private String username;
+    @NotBlank(message = "Email is mandatory")
     private String password;
-    private String firstname;
-    private String lastname;
-    private String country;
-    private String imageProfile;
-    private String gender;
-    private String occupation;
-    private String descriptionProfile;
 }

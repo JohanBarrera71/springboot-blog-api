@@ -1,8 +1,7 @@
 package com.app.features.auth.service;
 
-import com.app.features.auth.dto.AuthResponse;
-import com.app.features.auth.dto.LoginRequest;
-import com.app.features.auth.dto.RegisterRequest;
+import com.app.features.auth.dto.AuthenticationRequestBody;
+import com.app.features.auth.dto.AuthenticationResponseBody;
 import com.app.features.auth.model.Role;
 import com.app.features.auth.model.User;
 import com.app.features.auth.repository.UserRepository;
@@ -23,27 +22,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found."));
+    public AuthenticationResponseBody login(AuthenticationRequestBody loginRequestBody) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestBody.getUsername(), loginRequestBody.getPassword()));
+        UserDetails user = userRepository.findByUsername(loginRequestBody.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found."));
         String token = jwtService.getToken(user);
-        return AuthResponse.builder().token(token).build();
+        return AuthenticationResponseBody.builder().token(token).message("Authentication succeeded.").build();
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthenticationResponseBody register( AuthenticationRequestBody registerRequestBody) {
         User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .country(request.getCountry())
-                .imageProfile(request.getImageProfile())
-                .gender(request.getGender())
-                .occupation(request.getOccupation())
-                .descriptionProfile(request.getDescriptionProfile())
+                .username(registerRequestBody.getUsername())
+                .password(passwordEncoder.encode(registerRequestBody.getPassword()))
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        return AuthResponse.builder().token(jwtService.getToken(user)).build();
+        return AuthenticationResponseBody.builder().token(jwtService.getToken(user)).message("User registered successfully.").build();
     }
 }

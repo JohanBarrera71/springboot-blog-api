@@ -2,6 +2,8 @@ package com.app.features.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +25,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @NotNull
+    @Email
+    @Column(unique = true)
     private String username;
     @JsonIgnore
     private String password;
@@ -38,6 +42,15 @@ public class User implements UserDetails {
     private String occupation;
     @Column(name = "description_profile")
     private String descriptionProfile;
+
+    @Column(name = "facebook_url")
+    private String facebookUrl;
+    @Column(name = "instagram_url")
+    private String instagramUrl;
+    @Column(name = "twitter_url")
+    private String twitterUrl;
+    @Column(name = "linkedin_url")
+    private String linkedinUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

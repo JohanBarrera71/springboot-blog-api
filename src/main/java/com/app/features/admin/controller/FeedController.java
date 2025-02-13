@@ -1,5 +1,7 @@
 package com.app.features.admin.controller;
 
+import com.app.features.admin.dto.CommentDto;
+import com.app.features.admin.model.Comment;
 import com.app.features.admin.model.Post;
 import com.app.features.admin.service.AdminService;
 import com.app.features.admin.service.FeedService;
@@ -35,5 +37,11 @@ public class FeedController {
     public ResponseEntity<Post> dislikePost(@PathVariable Long postId, @RequestAttribute("authenticatedUser") User user){
         Post post = feedService.dislikePost(postId, user.getId());
         return ResponseEntity.ok(post);
+    }
+
+    @PostMapping("/posts/{postId}/comment")
+    public ResponseEntity<Comment> addComment(@PathVariable Long postId, @RequestBody CommentDto commentDto, @RequestAttribute("authenticatedUser") User user){
+        Comment comment = feedService.addComment(postId, commentDto, user.getId());
+        return ResponseEntity.ok(comment);
     }
 }

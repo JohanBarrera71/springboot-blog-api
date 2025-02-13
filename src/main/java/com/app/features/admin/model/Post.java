@@ -47,6 +47,9 @@ public class Post {
     @JoinTable(name = "post_labels", joinColumns = @JoinColumn(name = "id_post"), inverseJoinColumns = @JoinColumn(name = "id_label"))
     private List<Label> labels;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE) //mappedBy es para el lado no propietario de la relacion
+    private List<Comment> comments;
+
     @UpdateTimestamp
     @Column(name = "publish_date")
     private LocalDateTime publishDate;

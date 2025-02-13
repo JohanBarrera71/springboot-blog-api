@@ -7,6 +7,7 @@ import com.app.features.admin.model.Blog;
 import com.app.features.admin.model.Post;
 import com.app.features.admin.service.AdminService;
 import com.app.features.auth.model.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,13 @@ public class AdminController {
     }
 
     @PostMapping("/blogs")
-    public ResponseEntity<Blog> createBlog(@RequestBody BlogDto blogDto, @RequestAttribute("authenticatedUser") User user) {
+    public ResponseEntity<Blog> createBlog(@Valid @RequestBody BlogDto blogDto, @RequestAttribute("authenticatedUser") User user) {
         Blog blog = adminService.createBlog(blogDto, user.getId());
         return ResponseEntity.ok(blog);
     }
 
     @PutMapping("/blogs/{blogId}")
-    public ResponseEntity<Blog> editBlog(@PathVariable Long blogId, @RequestBody BlogDto blogDto, @RequestAttribute("authenticatedUser") User user) {
+    public ResponseEntity<Blog> editBlog(@PathVariable Long blogId, @Valid @RequestBody BlogDto blogDto, @RequestAttribute("authenticatedUser") User user) {
         Blog blog = adminService.editBlog(blogId, user.getId(), blogDto);
         return ResponseEntity.ok(blog);
     }
@@ -58,13 +59,13 @@ public class AdminController {
     }
 
     @PostMapping("/posts/{blogId}")
-    public ResponseEntity<Post> createPost(@PathVariable Long blogId, @RequestBody PostDto postDto, @RequestAttribute("authenticatedUser") User user) {
+    public ResponseEntity<Post> createPost(@PathVariable Long blogId, @Valid @RequestBody PostDto postDto, @RequestAttribute("authenticatedUser") User user) {
         Post post = adminService.createPost(blogId, postDto, user.getId());
         return ResponseEntity.ok(post);
     }
 
     @PatchMapping("/posts/{postId}")
-    public ResponseEntity<Post> editPost(@PathVariable Long postId, @RequestBody PostDto postDto, @RequestAttribute("authenticatedUser") User user) {
+    public ResponseEntity<Post> editPost(@PathVariable Long postId, @Valid @RequestBody PostDto postDto, @RequestAttribute("authenticatedUser") User user) {
         Post post = adminService.editPost(postId, postDto, user.getId());
         return ResponseEntity.ok(post);
     }
