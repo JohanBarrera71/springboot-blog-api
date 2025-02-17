@@ -29,13 +29,13 @@ public class FeedController {
 
     @PutMapping("/posts/{postId}/like")
     public ResponseEntity<Post> likePost(@PathVariable Long postId, @RequestAttribute("authenticatedUser") User user) {
-        Post post = feedService.likePost(postId, user.getId());
+        Post post = feedService.ratePost(postId, user.getId(), true);
         return ResponseEntity.ok(post);
     }
 
     @PutMapping("/posts/{postId}/dislike")
     public ResponseEntity<Post> dislikePost(@PathVariable Long postId, @RequestAttribute("authenticatedUser") User user){
-        Post post = feedService.dislikePost(postId, user.getId());
+        Post post = feedService.ratePost(postId, user.getId(), false);
         return ResponseEntity.ok(post);
     }
 

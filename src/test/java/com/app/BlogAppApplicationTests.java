@@ -8,6 +8,11 @@ class BlogAppApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Teniendo
+
+		// Cuando
+
+		// Entonces
 	}
 
 }
