@@ -1,5 +1,8 @@
 package com.app.features.admin.service;
 
+import com.app.exceptions.BlogNotFoundException;
+import com.app.exceptions.PostNotFoundException;
+import com.app.exceptions.UserNotFoundException;
 import com.app.features.admin.dto.BlogDto;
 import com.app.features.admin.dto.PostDto;
 import com.app.features.admin.model.Blog;
@@ -26,12 +29,12 @@ public class AdminService {
     private final LabelRepository labelRepository;
 
     public List<Blog> getAllBlogs(Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
         return blogRepository.findByAuthorId(author.getId());
     }
 
     public Blog createBlog(BlogDto blogDto, Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
         Blog blog = new Blog();
         blog.setTitle(blogDto.getTitle());
         blog.setDescription(blogDto.getDescription());
@@ -40,8 +43,8 @@ public class AdminService {
     }
 
     public Blog editBlog(Long blogId, Long authorId, BlogDto blogDto) {
-        Blog blog = blogRepository.findById(blogId).orElseThrow(() -> new IllegalArgumentException("Blog not found."));
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
+        Blog blog = blogRepository.findById(blogId).orElseThrow(() -> new BlogNotFoundException("Blog not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
 
         if (!blog.getAuthor().equals(author)) {
             throw new IllegalArgumentException("User is not the author of the blog.");
@@ -54,11 +57,11 @@ public class AdminService {
     }
 
     public void deleteBlog(Long blogId, Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
-        Blog blog = blogRepository.findById(blogId).orElseThrow(() -> new IllegalArgumentException("Blog not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
+        Blog blog = blogRepository.findById(blogId).orElseThrow(() -> new BlogNotFoundException("Blog not found."));
 
         if (!blog.getAuthor().equals(author)) {
-            throw new IllegalArgumentException("User is not the author the blog.");
+            throw new IllegalArgumentException("User is not the author the blog."); // TODO: Verify this exception
         }
 
         blogRepository.delete(blog);
@@ -70,17 +73,17 @@ public class AdminService {
     }
 
     public List<Post> getAllPostsByUser(Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
         return postRepository.findByAuthor_IdOrderByPublishDateDesc(author.getId());
     }
 
     public Post getContentPost(Long postId) {
-        return postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException("Post not found."));
+        return postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found."));
     }
 
     public Post createPost(Long blogId, PostDto postDto, Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
-        Blog blog = blogRepository.findById(blogId).orElseThrow(() -> new IllegalArgumentException("Blog not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
+        Blog blog = blogRepository.findById(blogId).orElseThrow(() -> new BlogNotFoundException("Blog not found."));
         Post post = new Post();
 
         if (!blog.getAuthor().equals(author)) {
@@ -106,8 +109,8 @@ public class AdminService {
     }
 
     public Post editPost(Long postId, PostDto postDto, Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found."));
 
         if (!post.getAuthor().equals(author)) {
             throw new IllegalArgumentException("User is not the author of the post.");
@@ -131,8 +134,8 @@ public class AdminService {
     }
 
     public void deletePost(Long postId, Long authorId) {
-        User author = userRepository.findById(authorId).orElseThrow(() -> new IllegalArgumentException("User not found."));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Post not found."));
+        User author = userRepository.findById(authorId).orElseThrow(() -> new UserNotFoundException("User not found."));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found."));
 
         if(!post.getAuthor().equals(author)){
             throw new IllegalArgumentException("User is not the author of the post.");

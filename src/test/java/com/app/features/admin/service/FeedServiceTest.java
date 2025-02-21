@@ -1,5 +1,7 @@
 package com.app.features.admin.service;
 
+import com.app.exceptions.PostNotFoundException;
+import com.app.exceptions.UserNotFoundException;
 import com.app.features.admin.dto.CommentDto;
 import com.app.features.admin.model.Comment;
 import com.app.features.admin.model.Post;
@@ -227,7 +229,7 @@ public class FeedServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             feedService.ratePost(postId, authorId, isLike);
         });
         verify(postRepository, never()).save(any());
@@ -249,7 +251,7 @@ public class FeedServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(PostNotFoundException.class, () -> {
             feedService.ratePost(postId, authorId, isLike);
         });
         verify(postRepository, never()).save(any());
@@ -307,7 +309,7 @@ public class FeedServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             feedService.addComment(postId, commentDto, authorId);
         });
         verify(commentRepository, never()).save(any());
@@ -326,7 +328,7 @@ public class FeedServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(PostNotFoundException.class, () -> {
             feedService.addComment(postId, commentDto, authorId);
         });
         verify(commentRepository, never()).save(any());

@@ -1,5 +1,8 @@
 package com.app.features.admin.service;
 
+import com.app.exceptions.BlogNotFoundException;
+import com.app.exceptions.PostNotFoundException;
+import com.app.exceptions.UserNotFoundException;
 import com.app.features.admin.dto.BlogDto;
 import com.app.features.admin.dto.LabelDto;
 import com.app.features.admin.dto.PostDto;
@@ -21,7 +24,6 @@ import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,7 +76,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.getAllBlogs(authorId);
         });
         verify(blogRepository, never()).findByAuthorId(any());
@@ -120,7 +122,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         //then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.createBlog(new BlogDto(), authorId);
         });
         verify(blogRepository, never()).save(any());
@@ -186,7 +188,7 @@ class AdminServiceTest {
         when(blogRepository.findById(blogId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(BlogNotFoundException.class, () -> {
             adminService.editBlog(blogId, authorId, blogDto);
         });
         verify(blogRepository, never()).save(any());
@@ -204,7 +206,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.editBlog(blogId, authorId, blogDto);
         });
         verify(blogRepository, never()).save(any());
@@ -259,7 +261,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.deleteBlog(blogId, authorId);
         });
         verify(blogRepository, never()).delete(any());
@@ -276,7 +278,7 @@ class AdminServiceTest {
         when(blogRepository.findById(blogId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(BlogNotFoundException.class, () -> {
             adminService.deleteBlog(blogId, authorId);
         });
         verify(blogRepository, never()).delete(any());
@@ -331,7 +333,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.getAllPostsByUser(authorId);
         });
         verify(postRepository, never()).findByAuthor_IdOrderByPublishDateDesc(any());
@@ -362,7 +364,7 @@ class AdminServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.empty());
 
         //then
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(PostNotFoundException.class, () -> {
             adminService.getContentPost(postId);
         });
     }
@@ -462,7 +464,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.createPost(blogId, postDto, authorId);
         });
         verify(postRepository, never()).save(any());
@@ -481,7 +483,7 @@ class AdminServiceTest {
         when(blogRepository.findById(blogId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(BlogNotFoundException.class, () -> {
             adminService.createPost(blogId, postDto, authorId);
         });
         verify(postRepository, never()).save(any());
@@ -600,7 +602,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.editPost(postId, postDto, authorId);
         });
         verify(postRepository, never()).save(any(Post.class));
@@ -620,7 +622,7 @@ class AdminServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(PostNotFoundException.class, () -> {
             adminService.editPost(postId, postDto, authorId);
         });
         verify(postRepository, never()).save(any(Post.class));
@@ -673,7 +675,7 @@ class AdminServiceTest {
         when(userRepository.findById(authorId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             adminService.deletePost(postId, authorId);
         });
         verify(postRepository, never()).delete(any());
@@ -691,7 +693,7 @@ class AdminServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(PostNotFoundException.class, () -> {
             adminService.deletePost(postId, authorId);
         });
         verify(postRepository, never()).delete(any());
